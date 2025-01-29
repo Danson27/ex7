@@ -174,8 +174,9 @@ def display_owners_by_num_pokemon():
     owners = []
     gather_all_owners(ownerRoot, owners)
 
-    owners.sort(key=lambda x: (-len(x["pokedex"]), x["owner"].lower()))
+    owners.sort(key=lambda x: (len(x["pokedex"]), x["owner"].lower()))
     print("=== The Owners we have, sorted by number of Pokemons ===")
+    print(" ")
     for owner in owners:
         print(f"Owner: {owner['owner']} (has {len(owner['pokedex'])} Pokemon)")
 
@@ -215,9 +216,9 @@ def post_order(root):
 def enterPokedexMenu(selectedOwner):
     while True:
         print("")
-        print(f"--{selectedOwner['owner']}'s Pokedex Menu--")
+        print(f"-- {selectedOwner['owner']}'s Pokedex Menu --")
         print("1. Add Pokemon")
-        print("2. Display Pokemon")
+        print("2. Display Pokedex")
         print("3. Release Pokemon")
         print("4. Evolve Pokemon")
         print("5. Back to Main")
@@ -245,7 +246,7 @@ def add_pokemon_to_owner(owner_node):
         pokeIDToAdd = int(input("Enter Pokemon ID to add: "))
         newPokemon = get_poke_dict_by_id(pokeIDToAdd)
         if not newPokemon:
-            print("Invalid Pokemon ID.")
+            print(f"ID {pokeIDToAdd} not found in Honen data.")
             break
         if any(pokemon["ID"] == pokeIDToAdd for pokemon in owner_node["pokedex"]):
             print("Pokemon already in the list. No changes made.")
@@ -280,11 +281,14 @@ def evolve_pokemon_by_name(owner_node):
     4) If new is a duplicate, remove it immediately
     """
     pokeNameForEvolve = input("Enter Pokemon Name to evolve: ").strip()
+    found = False  # Flag to check if the Pokémon is found
+
     for i, pokemon in enumerate(owner_node["pokedex"]):
         if pokemon["Name"].lower() == pokeNameForEvolve.lower():
+            found = True  # Set flag to True when found
             if pokemon["Can Evolve"] == "TRUE":
                 old_pokemon = owner_node["pokedex"].pop(i)
-                evolved_pokemon = get_poke_dict_by_id(old_pokemon["ID"]+1)
+                evolved_pokemon = get_poke_dict_by_id(old_pokemon["ID"] + 1)
                 if any(p["ID"] == evolved_pokemon["ID"] for p in owner_node["pokedex"]):
                     print(f"Pokemon evolved from {old_pokemon['Name']} (ID {old_pokemon['ID']}) "
                           f"to {evolved_pokemon['Name']} (ID {evolved_pokemon['ID']}).")
@@ -294,6 +298,11 @@ def evolve_pokemon_by_name(owner_node):
                 print(f"Pokemon evolved from {old_pokemon['Name']} (ID {old_pokemon['ID']}) "
                       f"to {evolved_pokemon['Name']} (ID {evolved_pokemon['ID']}).")
                 return
+
+    # If loop completes and `found` is still False, print the error message
+    if not found:
+        print(f"No Pokemon named '{pokeNameForEvolve}' in {owner_node['owner']}'s Pokedex.")
+
 
 ########################
 # 5) Sorting Owners by # of Pokemon
@@ -329,7 +338,7 @@ def print_all_owners():
     print("2) Pre-Order")
     print("3) In-Order")
     print("4) Post-Order")
-    method = read_int_safe("Your Choice: ")
+    method = read_int_safe("Your Choice: \n")
     if method == 1:
         bfs_print(ownerRoot)
     elif method == 2:
@@ -395,7 +404,7 @@ def print_owner_data(node):
     for pokemon in node["pokedex"]:
         print(f"ID: {pokemon['ID']}, Name: {pokemon['Name']}, Type: {pokemon['Type']}, "
               f"HP: {pokemon['HP']}, Attack: {pokemon['Attack']}, "
-              f"Can Evolve: {'TRUE' if pokemon['Can Evolve'] else 'FALSE'}")
+              f"Can Evolve: {'TRUE' if pokemon["Can Evolve"] == "TRUE" else 'FALSE'}")
     print()
 
 ########################
@@ -404,7 +413,7 @@ def print_owner_data(node):
 
 def display_filter_sub_menu(owner_node):
     while True:
-        print("--Display Filter Menu--")
+        print("-- Display Filter Menu --")
         print("1. Only a certain Type")
         print("2. Only Evolvable")
         print("3. Only Attack above __")
@@ -467,7 +476,7 @@ def main_menu():
         print("2. Existing Pokedex")
         print("3. Delete a Pokedex")
         print("4. Display owners by number of Pokemon")
-        print("5. Print all")
+        print("5. Print All")
         print("6. Exit")
         choice = input("Your choice: ")
         if choice == "1":
@@ -476,7 +485,7 @@ def main_menu():
                 print(f"Owner '{owner_name}' already exists. No new Pokedex created.")
             else:
                 print ("Choose your starter Pokemon: ")
-                print("1) Treeko")
+                print("1) Treecko")
                 print("2) Torchic")
                 print("3) Mudkip")
                 starter_choice= read_int_safe("Your choice: ")
