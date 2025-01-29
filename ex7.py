@@ -524,6 +524,9 @@ def main_menu():
                 print ("No owners at all. ")
             else:
                 print_all_owners()
+        elif choice == "6":
+            print("Goodbye!")
+            break
 
 
 
