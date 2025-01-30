@@ -308,7 +308,7 @@ def print_all_owners():
     print("2) Pre-Order")
     print("3) In-Order")
     print("4) Post-Order")
-    method = read_int_safe("Your Choice: \n")
+    method = read_int_safe("Your Choice: ")
     if method == 1:
         bfs_print(ownerRoot)
     elif method == 2:
@@ -329,28 +329,28 @@ def pre_order_print(root):
         return
     if root is not None:
         print_owner_data(root)
-        pre_order_print(root(["left"]))
-        pre_order_print(root(["right"]))
+        pre_order_print(root["left"])
+        pre_order_print(root["right"])
 
 def in_order_print(root):
     """
     Helper to print data in in-order.
     """
     if root is not None:
-        in_order_print(root(["left"]))
+        in_order_print(root["left"])
         print_owner_data(root)
-        in_order_print(root(["right"]))
+        in_order_print(root["right"])
     else:
         return
 
-def post_order_print(node):
+def post_order_print(root):
     """
     Helper to print data in post-order.
     """
-    if node is not None:
-        post_order_print(node.get(["left"]))
-        print_owner_data(node)
-        post_order_print(node.get(["right"]))
+    if root is not None:
+        post_order_print(root["left"])
+        print_owner_data(root)
+        post_order_print(root["right"])
 
 
 def bfs_print(root):
@@ -366,9 +366,9 @@ def bfs_print(root):
         node = queue.pop(0)  # Assign 'node' before using it
 
         print_owner_data(node)
-        if node(["left"]):
+        if node["left"]:
             queue.append(node["left"])
-        if node(["right"]):
+        if node["right"]:
             queue.append(node["right"])
 
 def print_owner_data(node):
