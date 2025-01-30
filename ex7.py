@@ -70,7 +70,7 @@ def get_poke_dict_by_id(poke_id):
 
 def get_poke_dict_by_name(name):
     for pokemon in HOENN_DATA:
-        if pokemon["name"].lower() == name.lower():
+        if pokemon["Name"].lower() == name.lower():
             return pokemon
     return None
 
@@ -146,11 +146,11 @@ def delete_owner_bst(root, owner_name):
     """
     Remove a node from the BST by owner_name. Return updated root.
     """
-    if ownerRoot is None:
+    if root is None:
         return root
-    if owner_name.lower() < root["owner"].lower():
+    elif owner_name.lower() < root["owner"].lower():
         root["left"] = delete_owner_bst(root["left"], owner_name)
-    if owner_name.lower() > root["owner"].lower():
+    elif owner_name.lower() > root["owner"].lower():
         root["right"] = delete_owner_bst(root["right"], owner_name)
 
     else:
@@ -166,7 +166,7 @@ def delete_owner_bst(root, owner_name):
             min = min_node(root["right"])
             root["owner"] = min["owner"]
             root["pokedex"] = min["pokedex"]
-            root["right"] = delete_owner_bst(root["right"], min_node["owner"])
+            root["right"] = delete_owner_bst(root["right"], min["owner"])
     return root
 
 
@@ -179,36 +179,6 @@ def display_owners_by_num_pokemon():
     print(" ")
     for owner in owners:
         print(f"Owner: {owner['owner']} (has {len(owner['pokedex'])} Pokemon)")
-
-
-########################
-# 3) BST Traversals
-########################
-
-def bfs_traversal(root):
-    """
-    BFS level-order traversal. Print each owner's name and # of pokemons.
-    """
-    pass
-
-def pre_order(root):
-    """
-    Pre-order traversal (root -> left -> right). Print data for each node.
-    """
-    pass
-
-def in_order(root):
-    """
-    In-order traversal (left -> root -> right). Print data for each node.
-    """
-    pass
-
-def post_order(root):
-    """
-    Post-order traversal (left -> right -> root). Print data for each node.
-    """
-    pass
-
 
 ########################
 # 4) Pokedex Operations
@@ -351,31 +321,36 @@ def print_all_owners():
         print("Invalid choice.")
 
 
-def pre_order_print(node):
+def pre_order_print(root):
     """
     Helper to print data in pre-order.
     """
-    if node is not None:
-        print_owner_data(node)
-        pre_order_print(node.get("left"))
-        pre_order_print(node.get("right"))
+    if ownerRoot is None:
+        return
+    if root is not None:
+        print_owner_data(root)
+        pre_order_print(root(["left"]))
+        pre_order_print(root(["right"]))
 
-def in_order_print(node):
+def in_order_print(root):
     """
     Helper to print data in in-order.
     """
-    if node is not None:
-        in_order_print(node.get("left"))
-        print_owner_data(node)
-        in_order_print(node.get("right"))
+    if root is not None:
+        in_order_print(root(["left"]))
+        print_owner_data(root)
+        in_order_print(root(["right"]))
+    else:
+        return
 
 def post_order_print(node):
     """
     Helper to print data in post-order.
     """
-    in_order_print(node.get("left"))
-    print_owner_data(node)
-    in_order_print(node.get("right"))
+    if node is not None:
+        post_order_print(node.get(["left"]))
+        print_owner_data(node)
+        post_order_print(node.get(["right"]))
 
 
 def bfs_print(root):
@@ -391,9 +366,9 @@ def bfs_print(root):
         node = queue.pop(0)  # Assign 'node' before using it
 
         print_owner_data(node)
-        if node.get("left"):
+        if node(["left"]):
             queue.append(node["left"])
-        if node.get("right"):
+        if node(["right"]):
             queue.append(node["right"])
 
 def print_owner_data(node):
@@ -404,7 +379,7 @@ def print_owner_data(node):
     for pokemon in node["pokedex"]:
         print(f"ID: {pokemon['ID']}, Name: {pokemon['Name']}, Type: {pokemon['Type']}, "
               f"HP: {pokemon['HP']}, Attack: {pokemon['Attack']}, "
-              f"Can Evolve: {'TRUE' if pokemon["Can Evolve"] == "TRUE" else 'FALSE'}")
+              f"Can Evolve: {"TRUE" if pokemon["Can Evolve"] == "TRUE" else "FALSE"}")
     print()
 
 ########################
@@ -451,22 +426,9 @@ def display_filter_sub_menu(owner_node):
 
 
 
-
-
 ########################
 # 8) Sub-menu & Main menu
 ########################
-
-def existing_pokedex():
-    """
-    Ask user for an owner name, locate the BST node, then show sub-menu:
-    - Add Pokemon
-    - Display (Filter)
-    - Release
-    - Evolve
-    - Back
-    """
-    pass
 
 def main_menu():
     global ownerRoot
