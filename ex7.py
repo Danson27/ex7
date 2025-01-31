@@ -386,6 +386,7 @@ def print_owner_data(node):
 
 def display_filter_sub_menu(owner_node):
     while True:
+        print()
         print("-- Display Filter Menu --")
         print("1. Only a certain Type")
         print("2. Only Evolvable")
