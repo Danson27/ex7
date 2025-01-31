@@ -60,7 +60,7 @@ def read_int_safe(prompt):
         try:
             return int(input(prompt))
         except ValueError:
-            print("Invalid input. Please enter an integer.")
+            print("Invalid input.\n")
 
 def get_poke_dict_by_id(poke_id):
     for pokemon in HOENN_DATA:
@@ -154,7 +154,9 @@ def delete_owner_bst(root, owner_name):
         root["right"] = delete_owner_bst(root["right"], owner_name)
 
     else:
-        print(f"Deleting '{owner_name}''s entire Pokedex.")
+        print(f"Deleting {owner_name}'s entire Pokedex...\n"
+              f"Pokedex deleted.")
+
 
         if root["left"] is None and root["right"] is None:
             return None
@@ -167,6 +169,7 @@ def delete_owner_bst(root, owner_name):
             root["owner"] = min_owner["owner"]
             root["pokedex"] = min_owner["pokedex"]
             root["right"] = delete_owner_bst(root["right"], min_owner["owner"])
+
     return root
 
 
@@ -205,7 +208,7 @@ def enterPokedexMenu(selectedOwner):
             print("Back to Main Menu.")
             break
         else:
-            print("Invalid choice. Please try again.")
+            print("Invalid choice.\n")
 
 
 def add_pokemon_to_owner(owner_node):
