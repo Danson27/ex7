@@ -163,10 +163,10 @@ def delete_owner_bst(root, owner_name):
         elif root["right"] is None:
             return root["left"]
         else:
-            min = min_node(root["right"])
-            root["owner"] = min["owner"]
-            root["pokedex"] = min["pokedex"]
-            root["right"] = delete_owner_bst(root["right"], min["owner"])
+            min_owner = min_node(root["right"])
+            root["owner"] = min_owner["owner"]
+            root["pokedex"] = min_owner["pokedex"]
+            root["right"] = delete_owner_bst(root["right"], min_owner["owner"])
     return root
 
 
@@ -192,7 +192,7 @@ def enterPokedexMenu(selectedOwner):
         print("3. Release Pokemon")
         print("4. Evolve Pokemon")
         print("5. Back to Main")
-        subChoice = int(input("Your choice: "))
+        subChoice = read_int_safe("Your choice: ")
         if subChoice == 1:
             add_pokemon_to_owner(selectedOwner)
         elif subChoice == 2:
@@ -289,12 +289,6 @@ def gather_all_owners(root, owners_list):
         gather_all_owners(root["right"], owners_list)
 
 
-def sort_owners_by_num_pokemon():
-    """
-    Gather owners, sort them by (#pokedex size, then alpha), print results.
-    """
-    pass
-
 
 ########################
 # 6) Print All
@@ -325,7 +319,7 @@ def pre_order_print(root):
     """
     Helper to print data in pre-order.
     """
-    if ownerRoot is None:
+    if root is None:
         return
     if root is not None:
         print_owner_data(root)
@@ -379,7 +373,7 @@ def print_owner_data(node):
     for pokemon in node["pokedex"]:
         print(f"ID: {pokemon['ID']}, Name: {pokemon['Name']}, Type: {pokemon['Type']}, "
               f"HP: {pokemon['HP']}, Attack: {pokemon['Attack']}, "
-              f"Can Evolve: {"TRUE" if pokemon["Can Evolve"] == "TRUE" else "FALSE"}")
+              f"Can Evolve: {'TRUE' if pokemon['Can Evolve'] == 'TRUE' else 'FALSE'}")
     print()
 
 ########################
@@ -413,7 +407,7 @@ def display_filter_sub_menu(owner_node):
             filteredForHP = [p for p in owner_node["pokedex"] if p["HP"] > max_hp]
             display_pokemon_list(filteredForHP)
         elif choice == 5:
-            name_start = input("Starting letter(s): ").strip().capitalize()
+            name_start = input("Starting letter(s): ").strip().lower()
             filteredByName = [p for p in owner_node["pokedex"] if p["Name"].lower().startswith(name_start.lower())]
             display_pokemon_list(filteredByName)
         elif choice == 6:
