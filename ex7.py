@@ -192,7 +192,7 @@ def enterPokedexMenu(selectedOwner):
         print("3. Release Pokemon")
         print("4. Evolve Pokemon")
         print("5. Back to Main")
-        subChoice = read_int_safe("Your choice: ")
+        subChoice = read_int_safe("Your choice: \n")
         if subChoice == 1:
             add_pokemon_to_owner(selectedOwner)
         elif subChoice == 2:
@@ -302,7 +302,7 @@ def print_all_owners():
     print("2) Pre-Order")
     print("3) In-Order")
     print("4) Post-Order")
-    method = read_int_safe("Your Choice: ")
+    method = read_int_safe("Your Choice: \n")
     if method == 1:
         bfs_print(ownerRoot)
     elif method == 2:
@@ -343,8 +343,9 @@ def post_order_print(root):
     """
     if root is not None:
         post_order_print(root["left"])
-        print_owner_data(root)
         post_order_print(root["right"])
+        print_owner_data(root)
+
 
 
 def bfs_print(root):
